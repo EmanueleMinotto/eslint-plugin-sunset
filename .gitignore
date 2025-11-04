@@ -2,7 +2,7 @@
 node_modules/
 
 # Build output
-lib/
+dist/
 
 # Coverage directory used by tools like istanbul
 coverage/

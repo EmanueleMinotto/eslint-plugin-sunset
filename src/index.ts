@@ -1,32 +1,43 @@
-type LintMessage = {
-  severity: number;
-  message: string;
-  line?: number;
-  column?: number;
-  nodeType?: string;
-  ruleId?: string;
-  [key: string]: any;
-};
+import type { LintMessage } from '@eslint/core';
+
+const REMOVAL_REGEX = /will be removed in\s+(\d{4}-\d{2}-\d{2})/i;
+
+function isDateInPastOrToday(date: Date): boolean {
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0); // Normalize to midnight
+  date.setHours(0, 0, 0, 0); // Normalize to midnight
+
+  return date <= today;
+}
 
 const plugin = {
-  rules: {},
   processors: {
-    '.': {
-      // Il preprocessor è richiesto quando si usa il postprocessor
-      preprocess(text: string, filename: string): string[] {
-        return [text];
-      },
-      // Il postprocessor riceve un array di messaggi per ogni file analizzato
-      postprocess(messages: LintMessage[][], filename: string): LintMessage[] {
-        // Appiattisce l'array di messaggi in un unico array
-        return messages.flat().map(message => {
-          // Se il messaggio è un warning, lo trasforma in un errore
-          if (message.severity === 1) {
-            return {
-              ...message,
-              severity: 2 // 2 rappresenta un errore in ESLint
-            };
+    'sunset-after-date': {
+      postprocess(messages: LintMessage[][]): LintMessage[] {
+        return messages.flat().map((message) => {
+          if (message.severity === 1 && typeof message.message === 'string') {
+            const match = REMOVAL_REGEX.exec(message.message);
+            if (!match) {
+              return message;
+            }
+
+            const dateStr = match[1];
+            const removalDate = new Date(dateStr);
+
+            // If the date is today or in the past, escalate to error
+            if (!isNaN(removalDate.getTime()) && isDateInPastOrToday(removalDate)) {
+              return {
+                ...message,
+                severity: 2
+              };
+            }
+
+            // Otherwise, keep the original severity
+            return message;
           }
+
+          // Default behavior for other warnings
           return message;
         });
       }
