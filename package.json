@@ -21,5 +21,9 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmanueleMinotto/eslint-plugin-sunset.git"
+  }
 }
