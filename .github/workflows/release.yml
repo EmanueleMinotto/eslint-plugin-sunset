@@ -11,32 +11,14 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Set up Node.js for NPM
-              uses: actions/setup-node@v1
+            - uses: actions/setup-node@v1
               with:
                   node-version: "20"
                   registry-url: "https://registry.npmjs.org"
 
             - run: npm install
+            - run: npm run build
+
             - run: npm publish
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    publish-gpr:
-        name: Publish on GPR
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "20"
-                  registry-url: "https://npm.pkg.github.com"
-
-            - run: npm install
-            - name: Publish to GitHub Packages
-              run: npm publish
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
