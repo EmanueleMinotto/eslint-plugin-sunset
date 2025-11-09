@@ -1,5 +1,6 @@
 {
   "name": "eslint-plugin-sunset",
+  "version": "1",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
