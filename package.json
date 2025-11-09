@@ -24,6 +24,6 @@
   "packageManager": "yarn@1.22.22",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EmanueleMinotto/eslint-plugin-sunset.git"
+    "url": "git+https://github.com/EmanueleMinotto/eslint-plugin-sunset.git"
   }
 }
