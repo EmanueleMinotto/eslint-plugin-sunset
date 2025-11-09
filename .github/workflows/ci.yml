@@ -12,7 +12,7 @@ jobs:
         strategy:
             matrix:
                 node: [20, 22, 24, "lts/*", "latest"]
-        name: Linting on Node v${{ matrix.node }}
+        name: Linting on Node ${{ matrix.node }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
         strategy:
             matrix:
                 node: [20, 22, 24, "lts/*", "latest"]
-        name: Testing on Node v${{ matrix.node }}
+        name: Testing on Node ${{ matrix.node }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
