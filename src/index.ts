@@ -1,6 +1,8 @@
 import type { LintMessage } from '@eslint/core';
 
-const REMOVAL_REGEX = /will be removed in\s+(\d{4}-\d{2}-\d{2})/i;
+
+// Default regex if not provided in config
+const DEFAULT_REMOVAL_REGEX = /will be removed in\s+(\d{4}-\d{2}-\d{2})/i;
 
 function isDateInPastOrToday(date: Date): boolean {
   const today = new Date();
@@ -11,13 +13,17 @@ function isDateInPastOrToday(date: Date): boolean {
   return date <= today;
 }
 
+
 const plugin = {
   processors: {
     'sunset-after-date': {
-      postprocess(messages: LintMessage[][]): LintMessage[] {
+      // Accepts options from ESLint configuration
+      postprocess(messages: LintMessage[][], _filename: string, config?: { removalRegex?: string }): LintMessage[] {
+        // Use custom regex if provided, otherwise use the default
+        const removalRegex = config?.removalRegex ? new RegExp(config.removalRegex, 'i') : DEFAULT_REMOVAL_REGEX;
         return messages.flat().map((message) => {
           if (message.severity === 1 && typeof message.message === 'string') {
-            const match = REMOVAL_REGEX.exec(message.message);
+            const match = removalRegex.exec(message.message);
             if (!match) {
               return message;
             }
@@ -36,7 +42,6 @@ const plugin = {
             // Otherwise, keep the original severity
             return message;
           }
-
           // Default behavior for other warnings
           return message;
         });

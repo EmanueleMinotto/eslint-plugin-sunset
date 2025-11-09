@@ -40,6 +40,26 @@ ESLint plugin that escalates warnings to errors based on a "sunset" (removal) da
     - If today is 2030-01-01 or later, the warning will be treated as an error.
     - If today is before that date, it will remain a warning.
 
+## Customizing the removal date regex
+
+You can customize the regular expression used to extract the removal date from warning messages by providing the `removalRegex` option in your ESLint configuration:
+
+```js
+module.exports = {
+    plugins: ["sunset"],
+    processor: "sunset/sunset-after-date",
+    processorOptions: {
+        removalRegex: "sunset=(\\d{4}/\\d{2}/\\d{2})",
+    },
+};
+```
+
+This allows you to match custom message formats, for example:
+
+> `Deprecated: sunset=2099/12/31`
+
+-   If today is 2099/12/31 or later, the warning will be treated as an error.
+
 ## License
 
 MIT
