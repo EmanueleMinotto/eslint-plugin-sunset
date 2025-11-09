@@ -1,0 +1,11 @@
+# Exclude unnecessary files and directories from npm publishing
+node_modules/
+__tests__/
+.github/
+.gitignore
+jest.config.js
+.eslintrc.js
+.eslintignore
+*.test.*
+*.spec.*
+README.md
